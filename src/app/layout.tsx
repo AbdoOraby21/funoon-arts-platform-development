@@ -5,7 +5,9 @@ import { getSessionUser } from "@/lib/auth";
 import Chrome from "@/components/chrome";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
+  ),
   title: {
     default: "فُنون — بيتُ الفنون العربية",
     template: "%s | فُنون",
@@ -20,18 +22,28 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
   const user = await getSessionUser();
+
   return (
     <html lang="ar" dir="rtl">
       <body className="bg-ink text-paper font-body antialiased">
-        {/* خطوط عربية: Cairo للعناوين وTajawal للنصوص — React 19 يرفع الروابط إلى <head> */}
+        {/* خطوط عربية: Cairo للعناوين وTajawal للنصوص */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
         <link
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&family=Tajawal:wght@300;400;500;700;800&display=swap"
         />
+
         <Chrome user={user}>{children}</Chrome>
       </body>
     </html>
