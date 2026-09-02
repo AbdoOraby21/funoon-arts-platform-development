@@ -1,0 +1,349 @@
+@import "tailwindcss";
+
+@theme {
+  /* لوحة "فُنون": حبر دافئ + ذهبي + ألوان الفنون */
+  --color-ink: #16110c;
+  --color-coal: #0f0b08;
+  --color-surface: #201913;
+  --color-panel: #292018;
+  --color-line: rgba(233, 219, 188, 0.12);
+  --color-line-strong: rgba(233, 219, 188, 0.22);
+  --color-gold: #d9a648;
+  --color-gold-2: #ecc97e;
+  --color-paper: #f2e9d8;
+  --color-sand: #ab9d85;
+  --color-danger: #d96a5f;
+
+  --font-display: "Cairo", "Tajawal", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Tajawal", "Cairo", ui-sans-serif, system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-ink);
+  color: var(--color-paper);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* طبقة حبيبات "مطبوعة" فوق كل شيء */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.08;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.7'/%3E%3C/svg%3E");
+}
+
+::selection {
+  background: var(--color-gold);
+  color: #1b1409;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-coal);
+}
+::-webkit-scrollbar-thumb {
+  background: #3a2e1f;
+  border-radius: 8px;
+  border: 2px solid var(--color-coal);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gold);
+}
+
+/* ------------------------------ مكونات عامة ------------------------------ */
+@layer components {
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 0.9rem;
+    padding: 0.7rem 1.4rem;
+    font-weight: 700;
+    font-size: 0.925rem;
+    line-height: 1;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition:
+      transform 0.18s ease,
+      background-color 0.18s ease,
+      border-color 0.18s ease,
+      color 0.18s ease,
+      box-shadow 0.18s ease;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .btn:active {
+    transform: translateY(1px) scale(0.99);
+  }
+  .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .btn-gold {
+    background: var(--color-gold);
+    color: #1d1508;
+    box-shadow: 0 8px 26px -10px rgba(217, 166, 72, 0.55);
+  }
+  .btn-gold:hover {
+    background: var(--color-gold-2);
+    transform: translateY(-1px);
+  }
+  .btn-ghost {
+    background: rgba(233, 219, 188, 0.05);
+    color: var(--color-paper);
+    border-color: var(--color-line-strong);
+  }
+  .btn-ghost:hover {
+    border-color: var(--color-gold);
+    color: var(--color-gold-2);
+    transform: translateY(-1px);
+  }
+  .btn-danger {
+    background: rgba(217, 106, 95, 0.12);
+    color: var(--color-danger);
+    border-color: rgba(217, 106, 95, 0.35);
+  }
+  .btn-danger:hover {
+    background: rgba(217, 106, 95, 0.2);
+  }
+  .btn-sm {
+    padding: 0.45rem 0.9rem;
+    font-size: 0.8rem;
+    border-radius: 0.7rem;
+  }
+
+  .input {
+    width: 100%;
+    border-radius: 0.85rem;
+    border: 1px solid var(--color-line);
+    background: rgba(15, 11, 8, 0.55);
+    color: var(--color-paper);
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    outline: none;
+    transition:
+      border-color 0.15s ease,
+      box-shadow 0.15s ease;
+  }
+  .input::placeholder {
+    color: rgba(171, 157, 133, 0.6);
+  }
+  .input:focus {
+    border-color: var(--color-gold);
+    box-shadow: 0 0 0 3px rgba(217, 166, 72, 0.16);
+  }
+
+  .label {
+    display: block;
+    font-size: 0.83rem;
+    font-weight: 500;
+    color: var(--color-sand);
+    margin-bottom: 0.45rem;
+  }
+
+  .card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: 1.25rem;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    border-radius: 999px;
+    padding: 0.28rem 0.8rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    border: 1px solid;
+    white-space: nowrap;
+  }
+
+  .hairline {
+    border-color: var(--color-line);
+  }
+
+  .title-display {
+    font-family: var(--font-display);
+    font-weight: 900;
+    letter-spacing: -0.01em;
+  }
+  .text-gold-grad {
+    color: var(--color-gold-2);
+  }
+
+  .table-base {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+  .table-base th {
+    text-align: right;
+    padding: 0.7rem 0.9rem;
+    color: var(--color-sand);
+    font-weight: 500;
+    font-size: 0.78rem;
+    border-bottom: 1px solid var(--color-line-strong);
+    white-space: nowrap;
+  }
+  .table-base td {
+    text-align: right;
+    padding: 0.8rem 0.9rem;
+    border-bottom: 1px solid var(--color-line);
+    vertical-align: middle;
+  }
+  .table-base tr:last-child td {
+    border-bottom: none;
+  }
+}
+
+/* ------------------------------ حركات ------------------------------ */
+@keyframes floatY {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+}
+@keyframes drift {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0.001deg);
+  }
+  100% {
+    transform: translate3d(-46px, -24px, 0) rotate(2.5deg);
+  }
+}
+@keyframes waveScroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-320px);
+  }
+}
+@keyframes framesY {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-160px);
+  }
+}
+@keyframes spinSlow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes eqBar {
+  0%,
+  100% {
+    transform: scaleY(0.3);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+@keyframes drawStroke {
+  from {
+    stroke-dashoffset: var(--dash, 600);
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@keyframes marqueeX {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(50%);
+  }
+}
+
+.anim-float {
+  animation: floatY 7s ease-in-out infinite;
+}
+.anim-drift {
+  animation: drift 26s ease-in-out infinite alternate;
+}
+.anim-wave {
+  animation: waveScroll 16s linear infinite;
+}
+.anim-frames {
+  animation: framesY 14s linear infinite;
+}
+.anim-spin-slow {
+  animation: spinSlow 28s linear infinite;
+}
+.anim-eq {
+  transform-origin: 50% 100%;
+  transform-box: fill-box;
+  animation: eqBar 1.7s ease-in-out infinite;
+}
+.anim-draw {
+  animation: drawStroke 9s ease-in-out infinite alternate;
+}
+.anim-breathe {
+  animation: breathe 5s ease-in-out infinite;
+}
+.anim-marquee {
+  animation: marqueeX 30s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ------------------------------ طباعة الشهادة ------------------------------ */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #fff !important;
+    color: #191410 !important;
+  }
+  body::after {
+    display: none !important;
+  }
+  .print-sheet {
+    box-shadow: none !important;
+  }
+}
