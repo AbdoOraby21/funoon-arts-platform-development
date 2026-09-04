@@ -1,10 +1,12 @@
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 
-const databaseUrl = process.env.DATABASE_URL;
+// Neon integration injects NEON_DATABASE_URL; keep DATABASE_URL for
+// compatibility with deployments that use the generic variable name.
+const databaseUrl = process.env.DATABASE_URL ?? process.env.NEON_DATABASE_URL;
 
 if (!databaseUrl) {
-  throw new Error("DATABASE_URL is required");
+  throw new Error("A Neon database connection string is required (DATABASE_URL or NEON_DATABASE_URL)");
 }
 
 const globalForDb = globalThis as typeof globalThis & {
