@@ -3,7 +3,9 @@ import { Pool } from "pg";
 
 // Neon integration injects NEON_DATABASE_URL; keep DATABASE_URL for
 // compatibility with deployments that use the generic variable name.
-const databaseUrl = process.env.DATABASE_URL ?? process.env.NEON_DATABASE_URL;
+// Prefer the Neon-managed URL in deployments; DATABASE_URL is kept as a fallback
+// for local or older environments that only define the generic variable.
+const databaseUrl = process.env.NEON_DATABASE_URL ?? process.env.DATABASE_URL;
 
 const globalForDb = globalThis as typeof globalThis & {
   __arenaNextJsPostgresqlPool?: Pool;
