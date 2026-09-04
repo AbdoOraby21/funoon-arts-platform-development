@@ -5,10 +5,6 @@ import { Pool } from "pg";
 // compatibility with deployments that use the generic variable name.
 const databaseUrl = process.env.DATABASE_URL ?? process.env.NEON_DATABASE_URL;
 
-if (!databaseUrl) {
-  throw new Error("A Neon database connection string is required (DATABASE_URL or NEON_DATABASE_URL)");
-}
-
 const globalForDb = globalThis as typeof globalThis & {
   __arenaNextJsPostgresqlPool?: Pool;
 };
